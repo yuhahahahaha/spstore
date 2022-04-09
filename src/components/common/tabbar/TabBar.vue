@@ -1,17 +1,17 @@
 <template>
     <div>
-        <maintabbar></maintabbar>
+        <MainTabbar></MainTabbar>
     </div>
 </template>
 
 <script>
 // import TabBarItem from './TabBarItem.vue'
-import maintabbar from 'components/content/maintabbar/maintabbar.vue' 
+import MainTabbar from 'components/content/MainTabbar/maintabbar.vue' 
 export default {
     name:"TabBar",
     components:{
         // TabBarItem
-        maintabbar
+        MainTabbar
     }
 }
 </script>
