@@ -39,7 +39,8 @@ import RecommendView from './childComps/RecommendView.vue'
 import FeatureView from './childComps/FeatureView.vue'
 
 import {getHomeMultidata,getHomeGoods} from 'network/home.js'
-import {debounce} from 'common/utils.js'
+// import {debounce} from 'common/utils.js'
+import {itemListenerMixin} from 'common/mixin.js'
 export default {
     name:"Home",
     components:{
@@ -52,6 +53,7 @@ export default {
       Scroll,
       BackTop
     },
+    mixins:[itemListenerMixin],
     data(){
       return{
         banners:[],
@@ -93,6 +95,7 @@ export default {
         // 修复上拉时scroll组件中.content高度不刷新问题（原因是有时候请求数据过慢，content高度被固定死了）。
         // this.$refs.scroll.refresh()
       },
+      // 多个组件用到，在mixin混入当中写
       backTop(){
         // this.$refs.scroll.scroll.scrollTo(0,0)
         this.$refs.scroll.scrollTo(0,0)
@@ -144,14 +147,15 @@ export default {
     },
     // 组件加载完后生命周期函数
     mounted(){
-      const refresh = debounce(this.$refs.scroll.refresh,300)
-        // 监听每一张图片加载完成
-      this.$bus.$on('itemImgLoad',()=>{
-        // console.log('-----');
-      // this.$refs.scroll.refresh()
-      refresh()
-      })
-
+      // const refresh = debounce(this.$refs.scroll.refresh,300)
+      //   // 监听每一张图片加载完成
+      // this.$bus.$on('itemImgLoad',()=>{
+      //   // console.log('-----');
+      // // this.$refs.scroll.refresh()
+      // refresh()
+      // })
+      // 采用混入
+      // console.log('home大傻逼');
       
     },
     // activated()和deactivated()只有在路由占位标签用keep-alive标签包裹才会产生或生效
@@ -159,10 +163,12 @@ export default {
       // console.log('activated');
       this.$refs.scroll.scrollTo(0,this.saveY,0)
       this.$refs.scroll.refresh()
-      console.log(this.saveY);
+      // console.log(this.saveY);
     },
     deactivated(){
       this.saveY = this.$refs.scroll.getScrollY()
+      // 跳出组件时关闭监听图片加载
+       this.$bus.$off('itemImgLoad',this.itemImgListener)
     }
 }
 </script>
@@ -179,7 +185,9 @@ export default {
     left: 0;
     z-index: 1;
     text-align: center;
-    color: white;
+    font-size: 20px;
+    color: #fff;
+    font-weight: 800;
     background-color: var(--color-tint);
   }
   /* .fixed{

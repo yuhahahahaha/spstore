@@ -61,7 +61,7 @@ export default {
             this.scroll && this.scroll.finishPullUp();
         },
         refresh(){
-            // console.log('-----');
+            // console.log('刷新-----');
             this.scroll && this.scroll.refresh();
         },
         getScrollY(){
